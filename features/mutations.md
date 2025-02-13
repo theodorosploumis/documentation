@@ -5,7 +5,7 @@
 This is a plug and play generic Mutation using the graphql_compose module logic. It manages CREATE, UPDATE, DELETE operations on the same Mutation.
 
 - Most of the Drupal entity types are allowed for this mutation. They are all predefined on the enum field entity_type  of the metadata input.
-- The mutation requires 2 input types. A metadata and a data object.
+- The mutation requires (at least) 2 input types. A metadata and a data object.
 - The metadata objects holds the main mutation parameters such as the entity_type, entity_bundle, operation, parent_entity_type, parent_entity_id and id (if not a CREATE operation).
 - The data object holds the actual values we are going to insert into or alter for the Entity.
 - Since we are using this mutation in a generic way all the values are passed as an object. Each object represents a field machine name and a value.
@@ -303,7 +303,7 @@ mutation {
 
 ### genericMutation: CREATE like (vote) on node
 
-> The vote entity is usually added on Drupal from module [https://www.drupal.org/project/votingapi](votingapi).
+> The vote entity is usually added on Drupal from module [votingapi](https://www.drupal.org/project/votingapi).
 
 ```graphql
 mutation {
@@ -326,6 +326,28 @@ mutation {
       entity_type
       entity_bundle
     }
+  }
+}
+```
+
+### Query to get permissions
+
+> Check permissions for a CUD action on entity of type group_content (module **group**).
+
+```graphql
+# Check permissions before executing the CREATE, DELETE mutation
+query {
+  permissions(
+    operation: CREATE, # or DELETE
+    uid: "25", # The User ID that will join/leave the Group
+    # entity_id: "460" # The group_content ID, used on DELETE,
+    entity_type: GROUP_CONTENT,
+    entity_bundle: "open_group-group_membership",
+    parent_entity_type: GROUP,
+    parent_entity_id: "9" # The Group ID
+  ) {
+    errors
+    success
   }
 }
 ```
