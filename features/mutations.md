@@ -15,7 +15,6 @@ This is a plug and play generic Mutation using the graphql_compose module logic.
 - Error violations are as much as detailed needed. No security related messages are displaying to the GraphQL endpoint users.
 - DELETE operations always return the null on the `entity` field.
 
-
 ## GraphQL definitions
 
 ```graphql
